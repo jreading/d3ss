@@ -7,7 +7,9 @@
     "compression": "^1.2.0",
     "connect": "^3.3.0",
     "d3": "^3.4.13",
-    "jsdom": "^1.0.3"
+    "jsdom": "^1.0.3",
+    "phantom": "^0.6.6",
+    "serve-static": "^1.7.0"
   },
   "repository": "jreading/d3ss",
   "author": "Johnny Reading <jreading@hellowallet.com>",
