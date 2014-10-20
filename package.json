@@ -1,0 +1,15 @@
+{
+  "name": "d3ss",
+  "version": "0.0.1",
+  "description": "D3 on the server to png output",
+  "main": "server.js",
+  "dependencies": {
+    "compression": "^1.2.0",
+    "connect": "^3.3.0",
+    "d3": "^3.4.13",
+    "jsdom": "^1.0.3"
+  },
+  "repository": "jreading/d3ss",
+  "author": "Johnny Reading <jreading@hellowallet.com>",
+  "license": "MIT"
+}
