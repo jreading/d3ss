@@ -51,12 +51,14 @@ var chart = {
 
         textLabel = chart
             .append("g")
-            .attr("transform", "translate(" + -53 + "," + 35 +")")
+            .attr("transform", "translate(" + 0 + "," + 35 +")")
             .attr("class", "label");
 
         textVal = textLabel
             .append("text")
             .text(options.score)
+            .style("text-anchor", "middle")
+            .style("letter-spacing", "-2")
             .attr("id", "text")
             .attr("font-family","sans-serif")
             .attr("font-size", "100px")

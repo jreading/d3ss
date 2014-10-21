@@ -26,33 +26,17 @@ app.use('/viz', function(req, res){
         },
         html: htmlStub,
         done: function(errors, window) {
-            var body = window.document.querySelector('body'),
-                el = window.document.querySelector('#main');
-
             file = chart.init(window, qStrings);
-            
             if (qStrings.mode === "raw") {
                 res.end(file);
             } else if (qStrings.mode === "rendered") {
-                fs.writeFile('raw/index.html', file, function(err) {
-                    if(err) {
-                        console.log('error saving document', err);
-                    } else {
-                        console.log('Raw file was saved');
-                    }
-                });
-
                 phantom.create(function (ph) {
                     ph.createPage(function (page) {
-                        page.open('http://localhost:1337/raw', function (status) {
-                            page.render('rendered/rendered.png', {format: 'png', quality: '100'}, function() {
-                                console.log('Rendered file was saved');
-                                ph.exit();
-                                fs.readFile('rendered/rendered.png', function(err, data) {
-                                    res.setHeader('Content-Type', 'image/png');
-                                    res.end(data);
-                                });
-                            });
+                        page.setContent(file);
+                        page.renderBase64("png", function(data) {
+                            res.setHeader("Content-Type", "image/png");
+                            res.end(new Buffer(data, 'base64'));
+                            ph.exit();
                         });
                     });
                 });
