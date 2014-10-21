@@ -1,23 +1,23 @@
-var connect = require('connect'),
-    serveStatic = require('serve-static'),
-    compression = require('compression'),
-    http = require('http'),
-    d3 = require('d3'),
-    jsdom = require('jsdom'),
-    fs = require('fs'),
-    phantom = require('phantom'),
-    url = require('url'),
-    chart = require('./chart');
+var connect = require("connect"),
+    serveStatic = require("serve-static"),
+    compression = require("compression"),
+    http = require("http"),
+    d3 = require("d3"),
+    jsdom = require("jsdom"),
+    fs = require("fs"),
+    phantom = require("phantom"),
+    url = require("url"),
+    chart = require("./chart");
 
 var app = connect(),
     port = 1337,
-    htmlStub = '<html><body><div id="main"></div></body></html>',
-    root = serveStatic('./'),
+    htmlStub = "<html><body><div id=\"main\"></div></body></html>",
+    root = serveStatic("./"),
     file;
 
 app.use(root);
 app.use(compression());
-app.use('/viz', function(req, res){
+app.use("/viz", function(req, res){
     var qStrings = url.parse(req.url, true).query;
 
     jsdom.env({
@@ -35,7 +35,7 @@ app.use('/viz', function(req, res){
                         page.setContent(file);
                         page.renderBase64("png", function(data) {
                             res.setHeader("Content-Type", "image/png");
-                            res.end(new Buffer(data, 'base64'));
+                            res.end(new Buffer(data, "base64"));
                             ph.exit();
                         });
                     });
@@ -46,4 +46,4 @@ app.use('/viz', function(req, res){
 });
 
 app.listen(port);
-console.log('Listening on ' + port);
+console.log("Listening on " + port);
