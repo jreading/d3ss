@@ -13,15 +13,11 @@ var connect = require('connect'),
 var app = connect(),
     port = 1337,
     htmlStub = '<html><body><div id="main"></div></body></html>',
-    raw = serveStatic('raw', {'index': ['index.html', 'index.htm']}),
+    root = serveStatic('./'),
     rendered = serveStatic('rendered', {'index': ['rendered.png']}),
     file;
 
-// gzip/deflate outgoing responses
 app.use(compression());
-
-// pass the html stub to jsDom
-
 
 app
 .use(redirect())
@@ -30,14 +26,14 @@ app
 
     jsdom.env({
         features : {
-            QuerySelector : true
+            QuerySelector: true
         },
         html: htmlStub,
         done: function(errors, window) {
             var body = window.document.querySelector('body'),
                 el = window.document.querySelector('#main');
 
-            file = chart.init(window);
+            file = chart.init(window, qStrings);
             
             if (qStrings.mode === "raw") {
                 res.end(file);
@@ -68,14 +64,7 @@ app
     });
 });
 
-app.use('/raw', raw);
+app.use(root);
 app.listen(port);
 
 console.log('Listening on ' + port);
-
-
-// page.open('/raw', function (status) {
-//     page.render('/rendered/rendered.png', {format: 'png', quality: '100'});
-//     phantom.exit();
-// });
-
