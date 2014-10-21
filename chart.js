@@ -5,14 +5,14 @@ var chart = {
     init: function(window, options) {
         var body = window.document.querySelector('body'),
             el = window.document.querySelector('#main'),
-            bgcolor;
+            bgcolor, bgcolorInit, chart, τ, angle, arc, background, foreground, textLabel, textVal, clientScript;
 
 
-        var bgColor = function() {
-            if (options.score >= 90) {
+        bgColor = function() {
+            if (options.score >= 66) {
                 return "green";
             }
-            if (options.score >= 70) {
+            if (options.score >= 33) {
                 return "orange";
             }
             if (options.score >= 0) {
@@ -20,55 +20,59 @@ var chart = {
             }
         };
 
+        bgcolorInit = options.mode === "raw" ? "#ddd": bgColor;
 
-        var chart = d3.select(el)
+        chart = d3.select(el)
             .append('svg:svg')
             .attr('width', 400)
             .attr('height', 400)
             .append("g")
             .attr("transform", "translate(200,200)");
 
-        var τ = 2 * Math.PI; // http://tauday.com/tau-manifesto
+        τ = 2 * Math.PI; // http://tauday.com/tau-manifesto
 
-        var angle = options.mode === "raw" ? 0 : (options.score/100) * τ;
+        angle = options.mode === "raw" ? 0 : (options.score/100) * τ;
 
-        var arc = d3.svg.arc()
+        arc = d3.svg.arc()
             .innerRadius(80)
             .outerRadius(100)
             .startAngle(0);
 
-        var background = chart.append("path")
+        background = chart.append("path")
             .datum({endAngle: τ})
             .style("fill", "#ddd")
             .attr("d", arc);
 
-        var foreground = chart.append("path")
+        foreground = chart.append("path")
             .datum({endAngle: angle})
             .style("fill", bgColor)
             .attr("d", arc)
             .attr("id", "foreground");
 
-        var textLabel = chart
+        textLabel = chart
             .append("g")
             .attr("transform", "translate(" + -53 + "," + 35 +")")
             .attr("class", "label");
 
-        textLabel
+        textVal = textLabel
             .append("text")
             .text(options.score)
+            .attr("id", "text")
             .attr("font-family","sans-serif")
             .attr("font-size", "100px")
-            .attr("fill", bgColor);
-
-        // // write the client-side script manipulating the circle
-        
-        var clientScript = fs.readFileSync('node_modules/d3/d3.min.js');
-        clientScript += "var score = " + options.score + ";";
-        clientScript += fs.readFileSync('chart_script.js');
+            .attr("fill", bgcolorInit)
+            .transition()
+            .duration(750);
 
         if (options.mode === "raw") {
+            clientScript = "var score = " + options.score + ";";
+            clientScript += "var bgColor = '" + bgColor() + "';";
+            clientScript += fs.readFileSync("chart_script.js");
             d3.select(body)
-                .append('script')
+                .append("script")
+                .attr("src","node_modules/d3/d3.min.js");
+            d3.select(body)
+                .append("script")
                 .html(clientScript);
         }
 

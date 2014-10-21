@@ -49,6 +49,7 @@ app.use('/viz', function(req, res){
                                 console.log('Rendered file was saved');
                                 ph.exit();
                                 fs.readFile('rendered/rendered.png', function(err, data) {
+                                    res.setHeader('Content-Type', 'image/png');
                                     res.end(data);
                                 });
                             });
