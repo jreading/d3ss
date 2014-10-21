@@ -1,5 +1,4 @@
 var connect = require('connect'),
-    redirect = require('connect-redirection'),
     serveStatic = require('serve-static'),
     compression = require('compression'),
     http = require('http'),
@@ -14,14 +13,11 @@ var app = connect(),
     port = 1337,
     htmlStub = '<html><body><div id="main"></div></body></html>',
     root = serveStatic('./'),
-    rendered = serveStatic('rendered', {'index': ['rendered.png']}),
     file;
 
+app.use(root);
 app.use(compression());
-
-app
-.use(redirect())
-.use('/viz', function(req, res){
+app.use('/viz', function(req, res){
     var qStrings = url.parse(req.url, true).query;
 
     jsdom.env({
@@ -64,7 +60,5 @@ app
     });
 });
 
-app.use(root);
 app.listen(port);
-
 console.log('Listening on ' + port);

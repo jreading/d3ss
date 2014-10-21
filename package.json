@@ -6,7 +6,6 @@
   "dependencies": {
     "compression": "^1.2.0",
     "connect": "^3.3.0",
-    "connect-redirection": "0.0.1",
     "d3": "^3.4.13",
     "jsdom": "^1.0.3",
     "phantom": "^0.6.6",
