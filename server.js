@@ -7,7 +7,7 @@ var connect = require("connect"),
     fs = require("fs"),
     phantom = require("phantom"),
     url = require("url"),
-    chart = require("./chart");
+    chart = require("./chart"); //this need to be dynamic
 
 var app = connect(),
     port = 1337,
